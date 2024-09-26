@@ -1,0 +1,243 @@
+@startuml dataDiagram
+!theme blueprint
+skinparam backgroundColor transparent
+skinparam defaultFontName courier
+package python_data_structures <<Rectangle>>{
+    struct scUserBadges{
+        pro                 : bool
+        creator_mid_tier    : bool
+        pro_unlimited       : bool
+        verified            : bool
+    }
+    struct scProduct{
+        id : str
+    }
+    struct scCreatorSubscription{
+        product : scProduct
+    }
+    struct scVisual{
+        urn         : str
+        entry_time  : int
+        visual_url  : str
+    }
+    struct scVisuals{
+        urn         : int
+        enabled     : bool
+        visuals     : list[scVisuals]
+        tracking    : str
+    }
+    struct scUserMini{
+        avatar_url          : str
+        badges              : scUserBadges
+        city                : str
+        country_code        : str
+        first_name          : str
+        followers_count     : int
+        full_name           : str
+        id                  : int
+        kind                : Literal["user"]
+        last_modified       : str
+        last_name           : str
+        permalink           : str
+        permalink_url       : str
+        station_permalink   : str
+        station_urn         : str
+        uri                 : str
+        urn                 : str
+        username            : str
+        verified            : bool
+    }
+    struct scUser{
+        comments_count          : int
+        created_at              : str
+        creator_subscriptions   : list[scCreatorSubscription]
+        creator_subscription    : scCreatorSubscription
+        description             : str
+        followings_count        : int
+        groups_count            : int
+        likes_count             : int
+        playlist_likes_count    : int
+        permalink               : str
+        reposts_count           : int | None
+        track_count             : int
+        visuals                 : scVisuals | None
+    }
+    struct scTranscodingFormat{
+        protocol    : scTranscodingFormatProtocol
+        mime_type   : scTranscodingFormatMimeType
+    }
+    struct scTranscoding{
+        duration    : int
+        format      : scTranscodingFormat
+        preset      : scTranscodingPreset
+        quality     : scTranscodingQuality
+        snipped     : bool
+        url         : str
+    }
+    struct scTrackMedia{
+        transcodings: list[scTranscoding]
+    }
+    struct scPublisherMetaData{
+        id                  : str
+        urn                 : str
+        album_title         : str = None
+        contains_music      : bool = None
+        isrc                : str = None
+        release_title       : str = None
+        artist              : str = None
+        upc_or_ean          : str = None
+        explicit            : bool = None
+        c_line_for_display  : str = None
+        p_line              : str = None
+        p_line_for_display  : str = None
+        c_line              : str = None
+    }
+    struct scTrackMini{
+        id                  : int
+        kind                : Literal["track"]
+        monetization_model  : scMonetizationModel
+        policy              : str
+    }
+    struct scTrack{
+        artwork_url         : str
+        caption             : str
+        comment_count       : int
+        commentable         : bool
+        created_at          : str
+        description         : str
+        display_date        : str
+        download_count      : int
+        downloadable        : bool
+        duration            : int
+        embeddable_by       : scEmbeddableBy
+        full_duration       : int
+        genre               : str
+        has_downloads_left  : bool
+        id                  : int
+        kind                : Literal["track"]
+        label_name          : str | None
+        last_modified       : str
+        license             : scLicense
+        likes_count         : int
+        media               : scTrackMedia
+        monetization_model  : scMonetizationModel
+        permalink           : str
+        permalink_url       : str
+        playback_count      : int
+        policy              : sctrackPolicy
+        public              : bool
+        publisher_metadata  : scPublisherMetaData | None
+        purchase_title      : str | None
+        purchase_url        : str | None
+        release_date        : str | None
+        reposts_count       : int
+        secret_token        : str | None
+        sharing             : scSharing
+        state               : sctrackState
+        station_permalink   : str
+        station_urn         : str
+        streamable          : bool
+        tag_list            : str | None
+        title               : str
+        track_authorization : str
+        uri                 : str
+        urn                 : str
+        user                : scUserMini
+        user_id             : int
+        visuals             : scVisuals | None
+        waveform_url        : str    
+    }
+    struct scPlaylistBase{
+        artwork_url         : str
+        created_at          : str
+        duration            : int
+        id                  : int
+        kind                : Literal["playlist"]
+        last_modified       : str
+        likes_count         : int
+        managed_by_feeds    : bool
+        permalink           : str
+        permalink_url       : str
+        public              : bool
+        release_date        : str | None
+        reposts_count       : int
+        secret_token        : str | None
+        sharing             : scSharing
+        title               : str
+        uri                 : str
+        user_id             : int
+        set_type            : str | None
+        is_album            : bool
+        published_at        : str
+        display_date        : str
+        user                : scUserMini
+        track_count         : int
+    }
+    struct scPlaylist{
+        description     : str
+        embeddable_by   : scEmbeddableBy
+        genre           : str
+        label_name      : str | None
+        license         : scLicense
+        purchase_title  : str | None
+        purchase_url    : str | None
+        tag_list        : str | None
+        tracks          : list[scTrackMini | scTrack]
+    }
+    'like structures
+    struct scLikedTrack{
+        created_at  : str
+        kind        : literal["like"]
+        track       : scTrack
+    }
+    struct scLikedPlaylist{
+        created_at  : str
+        kind        : literal["like"]
+        track       : scPlaylistBase
+    }
+    'repost structure
+    struct scRepost{
+        created_at  : str
+        user        : scUserMini
+        uuid        : str
+        caption     : str | None
+    }
+    struct scTrackRepost{
+        type    : literal["track-repost"]
+        track   : scTrack
+    }
+    struct scPlaylistRepost{
+        type    : literal["playlist-repost"]
+        track   : scPlaylist
+    }
+
+    'scUserMini relations
+    scUserBadges    "1"<--  scUserMini
+    'scUser relations
+    scUserMini              <|--    scUser
+    scCreatorSubscription   "*"<--  scUser
+    scProduct               "1"<--  scCreatorSubscription
+    scVisuals               "1"<--  scUser
+    scVisual                "*"<--  scVisuals
+    'scTrack relations
+    scUserMini          "1"<--  scTrack
+    scTrackMini         <|--    scTrack
+    scVisuals           "1"<--  scTrack
+    scPublisherMetaData "1"<--  scTrack
+    scTrackMedia        "1"<--  scTrack
+    scTranscoding       "1"<--  scTrackMedia
+    scTranscodingFormat "1"<--  scTranscoding
+    'scPlaylist relations
+    scPlaylistBase  <|--    scPlaylist
+    scUser          "1"<--  scPlaylist
+    scTrack         "*"<--  scPlaylist
+    'like structures relations
+    scTrack     "1"<--  scLikedTrack
+    scPlaylist  "1"<--  scLikedPlaylist
+    'like structures relations
+    scRepost    <|--    scTrackRepost
+    scTrack     "1"<--  scTrackRepost
+    scRepost    <|--    scPlaylistRepost
+    scPlaylist  "1"<--  scPlaylistRepost
+}
+@enduml

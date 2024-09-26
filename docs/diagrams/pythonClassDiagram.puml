@@ -1,0 +1,76 @@
+@startuml scDiagram
+
+skinparam backgroundColor transparent
+skinparam defaultFontName courier
+package python_class_diagram <<Rectangle>>{
+    class _API{
+        -_client_id     : str
+        -_oAuth_token   : str
+        -_headers       : dict
+        -_params        : dict
+        +getClientId()              : str
+        +setClientId(str id)        : void
+        +getOauthToken()            : str
+        +setOauthToken(str token)   : void
+        +getHeaders()               : str
+        +setHeaders(dict headers)   : void
+        +getParams()                : str
+        +setParams(dict params)     : void
+        +fetchClientId()            : str
+        +fetchOauthToken()          : str
+        +getRequest(str endpoint, dict params, dict headers)    : dict
+        +getCollection(str endpoint, str | int resolvable, 
+        bool loaded, bool stream)                              : list[dict]
+    }
+    class _Resolve{
+        +Resolve()
+        +~Resolve()
+        +resolve(str resolvable)   : dict
+    }
+    class User{
+        +User()
+        +~User()                            
+        +get(str | int resolvable)      : dict
+        +getTracks(str |int resolvable) : list[dict]
+        +getPlaylists(str |int resolvable, bool loaded) : list[dict]
+        +getAlbums(str |int resolvable, bool loaded)    : list[dict]
+        +getTopTracks(str |int resolvable)              : list[dict]
+        +getLikes(str |int resolvable)                  : list[dict]
+        +getReposts(str |int resolvable)                : list[dict]
+    }
+    class Track{
+        +Track()
+        +~Track()
+        +get(str | int | list[int] resolvable)                   : dict | list[dict]
+        +dowload(str | int | list[int] resolvable, str savePath) : void
+    }
+    class Playlist{
+        +Playlist()
+        +~Playlist()
+        +get(str | int | resolvable, bool loaded)   : dict
+        +load(dict)                                 : dict
+    }
+    class Search{
+        +Search()
+        +~Search()
+        +all(str query, str facet, str place, str genre, contentTier
+        int resultsDec, str endpoint, bool loaded)                     : list[dict]
+        +users(str query, str place, int resultsDec)                    : list[dict]
+        +tracks(str query, str genre, str contentTier, int resultsDec)  : list[dict]
+        +playlists(str query, str genre, int resultsDec, bool loaded)   : list[dict] 
+        +albums(str query, str genre, int resultsDec, bool loaded)      : list[dict] 
+    }
+    _API        <|-- _Resolve
+    _API        <|-- User
+    _Resolve    <|-- User
+    Track     "1"<-- User
+    _API        <|-- Track
+    _Resolve    <|-- Track
+    _API        <|-- Playlist
+    Track     "1"<-- Playlist
+    _Resolve    <|-- Playlist
+    _API        <|-- Search
+    Track     "1"<-- Search
+    _Resolve    <|-- Search
+}
+@enduml
