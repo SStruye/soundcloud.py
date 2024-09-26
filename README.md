@@ -1,2 +1,4 @@
-# soundcloud_py
- python wrapper for soundcloud API
+# soundcloudPython
+---
+> python wrapper for the soundcloud API.
+
