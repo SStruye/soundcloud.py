@@ -9,11 +9,10 @@
 
 Python wrapper for soundcloud API
 
-
 > ## class diagram
 
 <p align="center">
-  <img src="docs/img/scDiagram.png" width=""/>
+  <img src="docs/img/classDiagram.png" width=""/>
 </p>
 
 > ## soundcloud data diagram

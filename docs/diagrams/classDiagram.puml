@@ -1,8 +1,7 @@
-@startuml scDiagram
-
-skinparam backgroundColor transparent
+@startuml classDiagram
+!theme blueprint
 skinparam defaultFontName courier
-package python_class_diagram <<Rectangle>>{
+package class_diagram <<Rectangle>>{
     class _API{
         -_client_id     : str
         -_oAuth_token   : str

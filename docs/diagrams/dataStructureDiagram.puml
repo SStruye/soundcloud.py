@@ -2,7 +2,8 @@
 !theme blueprint
 skinparam backgroundColor transparent
 skinparam defaultFontName courier
-package python_data_structures <<Rectangle>>{
+
+package data_structures <<Rectangle>>{
     struct scUserBadges{
         pro                 : bool
         creator_mid_tier    : bool
@@ -184,7 +185,6 @@ package python_data_structures <<Rectangle>>{
         tag_list        : str | None
         tracks          : list[scTrackMini | scTrack]
     }
-    'like structures
     struct scLikedTrack{
         created_at  : str
         kind        : literal["like"]
@@ -195,7 +195,6 @@ package python_data_structures <<Rectangle>>{
         kind        : literal["like"]
         track       : scPlaylistBase
     }
-    'repost structure
     struct scRepost{
         created_at  : str
         user        : scUserMini
@@ -211,15 +210,13 @@ package python_data_structures <<Rectangle>>{
         track   : scPlaylist
     }
 
-    'scUserMini relations
     scUserBadges    "1"<--  scUserMini
-    'scUser relations
     scUserMini              <|--    scUser
     scCreatorSubscription   "*"<--  scUser
     scProduct               "1"<--  scCreatorSubscription
     scVisuals               "1"<--  scUser
     scVisual                "*"<--  scVisuals
-    'scTrack relations
+
     scUserMini          "1"<--  scTrack
     scTrackMini         <|--    scTrack
     scVisuals           "1"<--  scTrack
@@ -227,14 +224,15 @@ package python_data_structures <<Rectangle>>{
     scTrackMedia        "1"<--  scTrack
     scTranscoding       "1"<--  scTrackMedia
     scTranscodingFormat "1"<--  scTranscoding
-    'scPlaylist relations
+
+    scUserMini      "1"<--  scPlaylistBase
     scPlaylistBase  <|--    scPlaylist
-    scUser          "1"<--  scPlaylist
+    scTrackMini     "*"<--  scPlaylist
     scTrack         "*"<--  scPlaylist
-    'like structures relations
+
     scTrack     "1"<--  scLikedTrack
     scPlaylist  "1"<--  scLikedPlaylist
-    'like structures relations
+
     scRepost    <|--    scTrackRepost
     scTrack     "1"<--  scTrackRepost
     scRepost    <|--    scPlaylistRepost
