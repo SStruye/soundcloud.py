@@ -12,17 +12,15 @@ class Playlist(Base):
         pass
 
     def get(self, resolvable : int | str, loaded = False):
-        if(isinstance(resolvable, int)):
-            playlist = self.getRequest(endpoint = f"playlists/{resolvable}")
-        if (isinstance(resolvable, str)):
-            playlist = self.resolve(resolvable = resolvable)
-        else:
-            raise TypeError("Unsupported input. Supported inputs are int | str")
-
+        if(isinstance(resolvable, int)): playlist = self.getRequest(endpoint = f"playlists/{resolvable}")
+        if(isinstance(resolvable, str)): playlist = self.resolve(resolvable = resolvable)
+        else: raise TypeError("Unsupported input. Supported inputs are int | str")
         return self.load(playlist) if loaded else playlist
     
     def load(self, playlist : dict):
-        track = Track(self.getClientId(), self.getOauthToken())
-        playlist["tracks"] = track.get([tr["id"] for tr in playlist["tracks"]])
-        del track
-        return playlist
+        if(isinstance(playlist, dict)): 
+            track = Track(self.getClientId(), self.getOauthToken())
+            playlist["tracks"] = track.get([tr["id"] for tr in playlist["tracks"]])
+            del track
+            return playlist
+        else: raise TypeError("Unsupported input. Supported inputs are dict")

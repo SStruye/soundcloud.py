@@ -61,7 +61,7 @@ class Base:
         if("application/json" in response.headers["Content-Type"]): return response.json()
         return response.text
     
-    def resolve(self, resolvable: str):
+    def resolve(self, resolvable: str | int):
         if(resolvable[0] == "/"): resolvable = resolvable[1:]
         if(resolvable[-1] == "/"): resolvable = resolvable[:-1]
         if(not "soundcloud" in resolvable): resolvable = f'https://soundcloud.com/{resolvable}'
