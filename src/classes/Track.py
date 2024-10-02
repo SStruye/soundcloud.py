@@ -10,6 +10,9 @@ class Track(Base):
         self.setClientId(clientId)
         self.setOauthToken(oauthToken)
 
+    def __del__(self):
+        pass
+
     def get(self, resolvable: int | str | list[int]):
         if(isinstance(resolvable, str)):
             return self.resolve(resolvable=resolvable)

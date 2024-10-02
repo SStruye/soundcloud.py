@@ -66,12 +66,11 @@ class Base:
         if(resolvable[-1] == "/"): resolvable = resolvable[:-1]
         if(not "soundcloud" in resolvable): resolvable = f'https://soundcloud.com/{resolvable}'
         self.setParams({"url" : resolvable})
-        print(self.getHeaders())
         resolved = self.getRequest(endpoint = "/resolve")
         self.resetParams()
         return resolved
     
-    def getCollection(self, endpoint : str, resolvable : str | int, loaded : bool = False, stream : bool = False):
+    def _getCollection(self, endpoint : str, resolvable : str | int, collectionType : str = None, stream : bool = False):
         itemId = resolvable
         if(type(resolvable) == str): itemId = self.resolve(resolvable)["id"]
         if(stream and not "stream/" in endpoint): endpoint = "stream/" + endpoint
