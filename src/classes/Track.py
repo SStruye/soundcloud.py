@@ -48,3 +48,4 @@ class Track(Base):
         if(savePath[-1] != "/"): savePath += "/"
         with open(savePath+filename, "wb") as file:
             file.write(response.content)
+        return savePath+filename

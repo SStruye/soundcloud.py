@@ -206,8 +206,8 @@ package data_structures <<Rectangle>>{
         track   : scTrack
     }
     struct scPlaylistRepost{
-        type    : literal["playlist-repost"]
-        track   : scPlaylist
+        type        : literal["playlist-repost"]
+        playlist    : scPlaylist
     }
 
     scUserBadges    "1"<--  scUserMini
