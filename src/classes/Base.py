@@ -27,7 +27,7 @@ class Base:
         self._headers["Authorization"] = oauthToken
 
     # def fetchClientId():
-    # def getchOauthToken():
+    # def fetchOauthToken():
 
     def getHeaders(self):
         return self._headers
@@ -36,7 +36,7 @@ class Base:
         self._headers = headers
         self._headers.update(self._constHeaders)
 
-    def updateHeaders(self, headers : dict):
+    def addHeaders(self, headers : dict):
         self._headers.update(headers)
 
     def resetHeaders(self):
@@ -49,7 +49,7 @@ class Base:
         self._params = params
         self._params.update(self._constParams)
     
-    def updateParams(self, params : dict):
+    def addParams(self, params : dict):
         self._params.update(params)
 
     def resetParams(self):
@@ -67,25 +67,18 @@ class Base:
         if(not "soundcloud" in resolvable): resolvable = f'https://soundcloud.com/{resolvable}'
         self.setParams({"url" : resolvable})
         resolved = self.getRequest(endpoint = "/resolve")
-        self.resetParams()
         return resolved
     
-    def _getCollection(self, endpoint : str, resolvable : str | int, collectionType : str = None, stream : bool = False):
-        itemId = resolvable
-        if(type(resolvable) == str): itemId = self.resolve(resolvable)["id"]
-        if(stream and not "stream/" in endpoint): endpoint = "stream/" + endpoint
-        
+    def _getCollection(self, endpoint : str):
         self.setParams({"linked_partitioning" : 1, "limit" : 20})
         response = self.getRequest(endpoint)
-
         collection = response.get("collection")
         next_href = response.get("next_href")
         while(next_href):
             self.setParams(parse_qs(urlparse(next_href).query))
-            response = self.api.get(endpoint = endpoint)
+            response = self.getRequest(endpoint)
             next_href = response.get("next_href")
             collection += response.get("collection")
-        self.resetParams()
         return collection
     
     _params = {}
