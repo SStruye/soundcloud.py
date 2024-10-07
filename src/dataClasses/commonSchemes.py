@@ -10,7 +10,7 @@ class scVisual:
 
 @dataclass
 class scVisuals(JSONWizard):
-    urn         : int
+    urn         : str
     enabled     : bool
     visuals     : list[scVisual]
     tracking    : str

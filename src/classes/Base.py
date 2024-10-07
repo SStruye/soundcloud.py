@@ -25,6 +25,7 @@ class Base:
     def setOauthToken(self, oauthToken : str):
         self._constHeaders["Authorization"] = oauthToken
         self._headers["Authorization"] = oauthToken
+        self._headers.update(self._constHeaders)
 
     # def fetchClientId():
     # def fetchOauthToken():
@@ -37,7 +38,7 @@ class Base:
         self._headers.update(self._constHeaders)
 
     def addHeaders(self, headers : dict):
-        self._headers.update(headers)
+        self._headers.update(headers)   
 
     def resetHeaders(self):
         self._headers = self._constHeaders
@@ -57,7 +58,9 @@ class Base:
 
     def getRequest(self, endpoint : str):
         endpoint = re.sub(r'^/?(.*?)/?$', r'/\1', endpoint)
+        print(endpoint)
         response = requests.get(url = self._apiURL + endpoint, params = self._params, headers= self._headers)
+        print(response.status_code)
         if("application/json" in response.headers["Content-Type"]): return response.json()
         return response.text
     
@@ -89,5 +92,5 @@ class Base:
         "Origin": "https://soundcloud.com",
         "Referer": "https://soundcloud.com/",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.67",
-        "x-datadome-clientid": "qlsLUMlL7mtRVuNOFVAs9UThr2UmLtQ5jDnaBncszhiZDpIX2slHWMvXg1N2SSpBjHRDGjCCT70quFKyaiiroRZ5lVo5QqNkg8VpDJfuWJVjPySwMnq5Q1NKDgoAKeZP"
+        "x-datadome-clientid": "3299Bm7k0xNz616xuOP97IrSS5lq_twWW97JnTlmbE60y5fd9p61TsW6Xc7fbO5YeGuDgSXHIn0KI5HC0VZeIVkW1dSf9a3SoBXEZ1TzGxT4TCMOBv8aYGCVbehIFZC5"
     }
