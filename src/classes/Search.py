@@ -43,7 +43,7 @@ class Search(Base):
         return self.all(query = query, endpoint = "search/users", facet = "place", place = place, resultsDec = resultsDec)
     
     def tracks(self, query : str, genre : str = None, contentTier : str = None, resultsDec : int = 1):
-        return self.all(query = query, endpoint = "search/tracks", facet = "place", genre = genre, contentTier = contentTier, resultsDec = resultsDec)
+        return self.all(query = query, endpoint = "search/tracks", facet = "genre", genre = genre, contentTier = contentTier, resultsDec = resultsDec)
     
     def playlist(self, query : str, genre : str = None, resultsDec : int = 1, loaded : bool = False):
         return self.all(query = query, endpoint = "search/playlists_without_albums", facet = "genre", genre = genre, resultsDec = resultsDec, loaded = loaded)

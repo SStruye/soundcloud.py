@@ -58,9 +58,7 @@ class Base:
 
     def getRequest(self, endpoint : str):
         endpoint = re.sub(r'^/?(.*?)/?$', r'/\1', endpoint)
-        print(endpoint)
         response = requests.get(url = self._apiURL + endpoint, params = self._params, headers= self._headers)
-        print(response.status_code)
         if("application/json" in response.headers["Content-Type"]): return response.json()
         return response.text
     

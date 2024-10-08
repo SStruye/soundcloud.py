@@ -13,7 +13,7 @@ class Playlist(Base):
 
     def get(self, resolvable : int | str, loaded = False):
         if(isinstance(resolvable, int)): playlist = self.getRequest(endpoint = f"playlists/{resolvable}")
-        if(isinstance(resolvable, str)): playlist = self.resolve(resolvable = resolvable)
+        elif(isinstance(resolvable, str)): playlist = self.resolve(resolvable = resolvable)
         else: raise TypeError("Unsupported input. Supported inputs are int | str")
         return self.load(playlist) if loaded else playlist
     

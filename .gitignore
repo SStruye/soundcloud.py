@@ -2,6 +2,7 @@ _scDB.py
 _development/
 test/
 testing.ipynb
+example.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
