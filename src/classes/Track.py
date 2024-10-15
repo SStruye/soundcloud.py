@@ -2,6 +2,8 @@ from .Base import Base
 import requests
 import re
 from urllib.parse import unquote
+from dataclass_wizard import fromdict
+from ..dataClasses.trackSchemes import scTrack
 
 class Track(Base):
     def __init__(self, clientId : str = None, oauthToken : str = None):
@@ -13,16 +15,22 @@ class Track(Base):
     def __del__(self):
         pass
 
-    def get(self, resolvable: int | str | list[int]):
-        if(isinstance(resolvable, str)): return self.resolve(resolvable=resolvable)
-        if(isinstance(resolvable, int)): return self.getRequest(endpoint=f"tracks/{resolvable}")
+    def get(self, resolvable: int | str | list[int], asDataClass : bool = False):
+        if(isinstance(resolvable, str)): 
+            track = self.resolve(resolvable=resolvable)
+            return fromdict(scTrack, track) if asDataClass else track
+        
+        if(isinstance(resolvable, int)): 
+            track = self.getRequest(endpoint=f"tracks/{resolvable}")
+            return fromdict(scTrack, track) if asDataClass else track
+        
         if(isinstance(resolvable, list) and all(isinstance(t, int) for t in resolvable)):
             splitted_ids = [resolvable[i:i + 50] for i in range(0, len(resolvable), 50)]
             tracks = []
             for split in splitted_ids:
                 self.setParams({"ids": ",".join(map(str, split))})
                 tracks += self.getRequest(endpoint="tracks")
-            return tracks
+            return [fromdict(scTrack, track) for track in tracks] if asDataClass else tracks
 
         raise TypeError("Unsupported input. Supported inputs are int, str, or list[int]")
     
