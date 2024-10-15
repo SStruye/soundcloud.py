@@ -26,7 +26,7 @@ class Track(Base):
 
         raise TypeError("Unsupported input. Supported inputs are int, str, or list[int]")
     
-    def download(self, resolvable : int | str, savePath = "./test/"):
+    def download(self, resolvable : int | str, savePath = "./test/", custom_fn : str = None):
         id = resolvable
         if(isinstance(resolvable, str)): id = self.resolve(resolvable)["id"]
         try:
@@ -38,14 +38,16 @@ class Track(Base):
         filename  = re.search(r'filename="([^"]+)"', response.headers["Content-Disposition"])
         filename_ = re.search(r'filename\*\=utf-8\'\'(.+)', response.headers["Content-Disposition"])
 
-        if(filename_): 
+        if(custom_fn):
+            filename = f"{custom_fn}.{response.headers['x-amz-meta-file-type']}"
+        elif(filename_): 
             filename = unquote(filename_.group(1))
         elif(filename):
             filename = filename.group(1)
-            if("." not in filename): filename += f".{response.headers["x-amz-meta-file-type"]}"
+            if("." not in filename): filename += f".{response.headers['x-amz-meta-file-type']}"
         else:
-            filename = f"untitled.{response.headers["x-amz-meta-file-type"]}"
+            filename = f"untitled.{response.headers['x-amz-meta-file-type']}"
         if(savePath[-1] != "/"): savePath += "/"
         with open(savePath+filename, "wb") as file:
             file.write(response.content)
-        return savePath+filename
+        return filename
